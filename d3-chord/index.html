@@ -52,9 +52,34 @@
                     {"destination":"BC234","count":"1"},
                     {"destination":"AB123","count":"1"}
                 ]},
-                {"id":"CD459","first_name":"Person Two","area":"1","active":"1","plans":[
+                {"id":"CD459","first_name":"B1","area":"1","active":"1","plans":[
+                    {"destination":"DM459","count":"1"},
+                    {"destination":"EF329","count":"1"}
+                ]},
+                {"id":"CD460","first_name":"B2","area":"1","active":"1","plans":[
+                    {"destination":"AB123","count":"1"},
+                    {"destination":"BC234","count":"1"},
+                    {"destination":"CD459","count":"1"},
+                    {"destination":"DM459","count":"1"},
+                    {"destination":"EF329","count":"1"}
+                ]},
+                {"id":"CD464","first_name":"B6","area":"1","active":"1","plans":[
+                    {"destination":"AB123","count":"1"},
+                    {"destination":"BC234","count":"1"},
+                    {"destination":"CD459","count":"1"},
+                    {"destination":"DM459","count":"1"},
+                    {"destination":"EF329","count":"1"}
+                ]},
+                {"id":"CD461","first_name":"B3","area":"1","active":"1","plans":[
                     {"destination":"AB123","count":"2"}
                 ]},
+                {"id":"CD462","first_name":"B4","area":"1","active":"1","plans":[
+                    {"destination":"AB123","count":"2"}
+                ]},
+                {"id":"CD463","first_name":"B5","area":"1","active":"1","plans":[
+                    {"destination":"AB123","count":"2"}
+                ]},
+
                 {"id":"MN549","first_name":"Person Three","area":"1","active":"1","plans":[
                     {"destination":"GH529","count":"2"}
                 ]},
@@ -74,8 +99,8 @@
                     {"destination":"EF329","count":"1"}
                 ]},
                 {"id":"EF329","first_name":"Person Seven","area":"4","active":"1","plans":[
-                    {"destination":"BC234","count":"1"},
-                    {"destination":"AB123","count":"1"},
+                    {"destination":"BC234","count":"2"},
+                    {"destination":"AB123","count":"4"},
                     {"destination":"GH529","count":"1"}
                 ]}
             ];
@@ -148,30 +173,15 @@
             var svg = d3.select(".content").selectAll("div")
             	.data([plans])
             	.enter()
-            		.append("div")
-            		/*.style("width", width + "px")
-                .style("height", height + "px")*/
-                .style("width",10 + "px")
-                .style("height", 10 + "px")
-            		.append("svg:svg")
-                /*.attr("width", width)
-                .attr("height", height)*/
+            	.append("div")
+            	.style("width", width + "px")
+                .style("height", height + "px")
+            	.append("svg:svg")
                 .attr("width", width)
                 .attr("height", height)
               	.append("svg:g")
-                .attr("opacity",0)
-                //.transition()
-                //.duration(500)
                 .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
-
-                .attr("opacity",1);
     
-                 /*svg
-                 .attr("opacity",0)
-                .transition()
-                .attr("opacity",1).
-                duration(2000);*/
-
             svg.each(function(matrix, j) {
             	var svg = d3.select(this);
             	facultyLayout.matrix(plans);
@@ -213,9 +223,9 @@
             		.attr("xlink:href", function(d, i) {
             			return "#" + areas[areaIds[data[i].area]].id + "-" + d.index;
             		})
-            		.text(function(d, i) {
+            		/*.text(function(d, i) {
             			return data[i].first_name;
-            		});
+            		});*/
 
 
             	// add area groups
@@ -276,46 +286,55 @@
             			})
             });
             svg.selectAll(".area-group")
-            .attr("opacity" , 0)
-            .attr("transform", "rotate(-50)")
-            .transition()
-            .attr("transform", "rotate(0)")
-            .duration(1500)
-            //.style("transform","rotate(20deg)")
-            .attr("opacity" , 1);
+                .attr("opacity" , 0)
+                .attr("transform", "rotate(-50)")
+                .transition()
+                .attr("transform", "rotate(0)")
+                .duration(1500)
+                //.style("transform","rotate(20deg)")
+                .attr("opacity" , 1);
 
             svg.selectAll(".faculty-group")
-            .attr("opacity" , 0)
-            .attr("transform", "rotate(-50)")
-            .transition()
-            .delay(200)
-            .attr("transform", "rotate(0)")
-            .duration(1500)
-            .attr("opacity" , 1);
+                .attr("opacity" , 0)
+                .attr("transform", "rotate(-50)")
+                .transition()
+                .delay(200)
+                .attr("transform", "rotate(0)")
+                .duration(1500)
+                .attr("opacity" , 1);
 
             svg.selectAll(".chord")
-            .attr("opacity" , 0)
-            .attr("transform", "rotate(-50)")
-            .transition()
-            .delay(500)
-            .attr("transform", "rotate(0)")
-            .duration(1500)
-            .attr("opacity" , 1);
+                .attr("opacity" , 0)
+                .attr("transform", "rotate(-50)")
+                .transition()
+                .delay(500)
+                .attr("transform", "rotate(0)")
+                .duration(1500)
+                .attr("opacity" , 1);
 
 
             $(".faculty-group").mouseenter(function() {
                 var selectedArea = $(this).find('path').attr('id').charAt(2);
-
                 $(".chord").each(function(){
                     var idToTest = $(this).attr('id').charAt(2);
                     if(selectedArea !== idToTest){
-                        $(this).fadeTo(50, 1);
+                        $(this).fadeTo(50, 0);
                     }
+                    $(".faculty-group").each(function(){
+                        var idToTest = $(this).find('path').attr('id').charAt(2);
+                        if(selectedArea !== idToTest){
+                            $(this).fadeTo(50, .3);
+
+                        }
+                    });
                 });
                 // unfade specific chords
             });
             $(".faculty-group").mouseleave(function() {
                 $(".chord").each(function(){
+                    $(this).fadeTo(50, 1);
+                });
+                 $(".faculty-group").each(function(){
                     $(this).fadeTo(50, 1);
                 });
             });
@@ -326,7 +345,7 @@
                 $(".chord").each(function(){
                     var idToTest = $(this).attr('id').charAt(0);
                     if(selectedArea !== idToTest){
-                        $(this).fadeTo(50, .3);
+                        $(this).fadeTo(50, 0);
                     }
                 /*svg.selectAll(".area-group").transition()
                 .duration(1000)
