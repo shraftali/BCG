@@ -51,7 +51,8 @@
             "Workplace Design",
             "Telephony Design",
             "Work Practice Design",
-            "Call Migration"
+            "Call Migration",
+            ""
             ]; 
        function changeLabels(val)
         {
@@ -83,16 +84,15 @@
                 }],
                 yAxis: {
                     min: 0,
-                    max: 5,
+                    max: 6,
                     labels:{
                         //format: "{0:C}"
-                       template: "#= changeLabels(value) #",
-                        skip: 1
+                       template: "#= changeLabels(value) #"
                     }
                 },
                 tooltip: {
                     visible: true,
-                    format: "{0:d}, ${1}"
+                    format: "{0:d}, {1}"
                 }
             });
         }
